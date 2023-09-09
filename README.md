@@ -28,9 +28,9 @@ Attention au consignes de rendu du projet ! Voir consignes page 12 (encadre en b
 
 
 Notes pour la soutenance :
-
+********************************************************************************************************************************************
 - Questions generales sur le systeme d'exploitation.
-
+====================================================
 	> Pourquoi ai-je choisi Debian ?
 		
 		>> Parce que plus simple a installer et a configurer.
@@ -79,9 +79,9 @@ Notes pour la soutenance :
 
 	> Description de la partition chiffree avec LVM (commande lsblk pour acceder aux partitions).
 
-
+********************************************************************************************************************************************
 - Differences entre Aptitude et apt-get.
-
+========================================
 	Ressource : https://fr.linux-console.net/?p=1157#gsc.tab=0
 
 	> Il s'agit de deux outils de gestion de package : activites, installations, suppressions, recherches, etc...
@@ -103,47 +103,46 @@ Notes pour la soutenance :
 			* D'une part il a plus de fonctionnalites.
 			* D'autre part il va prendre des initiatives (suppression automatique de packages non utilises par exemple) et etre force de proposition en cas de conflits ou problemes. Avec apt-get le user doit utiliser des options ou variantes supplementaires en ligne de commande.
 
-
+********************************************************************************************************************************************
 - Qu'est-ce que SELinux ?
-	
+=========================
+	> SELinux (Security-Enhanced Linux) est une architecture de securite pour systemes Linux qui permet aux administrateurs de mieux controler les acces au systeme.	
 
 - Qu'est-ce que AppArmor ?
 	
 	> Le systeme de securite Linux fournit la securite MAC (Mandatory Access Control). Ce systeme d'administration permet de restreindre les actions que les processus peuvent realiser. Ce systeme est inclus par defaut avec Debian.
 	> La commande aa-status permet de verifier s'il est actif.
 
+********************************************************************************************************************************************
+- Service SSH
+=============
+	> Qu'est-ce que SSH ?
 
-- Qu'est-ce que SSH ?
-
-	> SSH (Secure SHell) est un mecanisme d'authentification entre un client et un environnement hote. 
-	> SSH encrypte les communications.
-	> Il est possible de se connecter a SSH sur un terminal Mac ou Linux.
-
-
-- Test du service SSH : mise en place d'un nouveau compte.
-
-	> sudo systemctl status ssh
-	> getent group sudo
-	> getent group user42
-	> sudo adduser new username
-	> sudo groupadd groupname
-	> sudo usermod -aG groupname username
-	> sudo chage -l username
-	> hostnamectl
-	> hostnamectl set-hostname new_hostname
+		>> SSH (Secure SHell) est un mecanisme d'authentification entre un client et un environnement hote. 
+		>> SSH encrypte les communications.
+		>> Il est possible de se connecter a SSH sur un terminal Mac ou Linux.
 
 
-- Question sur le fonctionnement du service SSH.
+	> Test du service SSH : mise en place d'un nouveau compte.
 
+		>> sudo systemctl status ssh
+		>> getent group sudo
+		>> getent group user42
+		>> sudo adduser new username
+		>> sudo groupadd groupname
+		>> sudo usermod -aG groupname username
+		>> sudo chage -l username
+		>> hostnamectl
+		>> hostnamectl set-hostname new_hostname
 
-
+********************************************************************************************************************************************
 - Le pare-feu UFW devra etre actif au lancement de la VM.
-	
+=========================================================
 	> sudo ufw status
 
-
+********************************************************************************************************************************************
 - Qu'est-ce que Cron (ou Crontab) ?
-
+===================================
 	> Il s'agit d'un planificateur de taches qui permet de lancer des applications de facon reguliere.
 	> Dans le cadre du projet Born2beRoot, nous nous en servons pour afficher les informations du statut systeme toutes les 10 minutes dans le terminal de commandes de la VM.
 	> crontab -l : permet a l'administrateur root d'afficher le contenu du fichier crontab.
@@ -159,14 +158,15 @@ Notes pour la soutenance :
 		>> La syntaxe '*/10' permet d'executer le script monitoring.sh toutes les 10 minutes.
 		>> Si a la place de '*/10', nous avions renseigne '10', alors le script s'executerait toutes les heures a Xh10m precises.
 
-- Modification du hostname durant la soutenance.
-
+********************************************************************************************************************************************
+- Modification du hostname.
+===========================
 	> hostnamectl : permet de monitorer le nom du hostname.
 	> hostnamectl set-hostname new_hostname : permet de modifier le nom du hostname.
 
-
+********************************************************************************************************************************************
 - Configuration de la politique de securite des mots de passe.
-
+==============================================================
 	Ressources: 
 	https://debian-facile.org/doc:securite:passwd:libpam-pwquality
 	https://kifarunix.com/enforce-password-complexity-policy-on-ubuntu-18-04/
@@ -189,9 +189,9 @@ Notes pour la soutenance :
 		>> PASS_MIN_DAYS 2 : La modification d'un mot de passe qui vient d'etre cree ne pourra pas etre faite avant 2 jours. Possibilite d'entrer la valeur -1 pour desactiver cette option.
 		>> PASS_WARN_AGE 7 : Le user recevra un message d'avertissement 7 jours avant l'expiration de son mot de passe. Possibilite de desactiver cette option en entrant un nombre negatif ou en la laissant non renseignee.
 
-
+********************************************************************************************************************************************
 - Modification des mots de passe.
-
+=================================
 	> En mode user (laroges) :
 		>> passwd ou sudo passwd.
 		>> Entrer le mot de passe actuel.
@@ -204,27 +204,27 @@ Notes pour la soutenance :
 		>> Le systeme ne demande pas le mot de passe courant.
 		>> Entrer et confirmer le nouveau mot de passe selon le meme principe que pour le user dans le point precedent.
 
-- Savoir expliquer l'administration des regles de securite des mots de passe.
-
+********************************************************************************************************************************************
 Commandes :
-lsblk : permet de consulter le "partitionnement".
-dpkg --list : permet de consulter la liste des packages installes.
-apt-cache policy <paquet> : permet de voir si un paquet est a jour.
-cd /usr/local/bin/ && nano monitoring.sh : permet de consulter le fichier de monitoring.
-sudo crontab -u root -e : permet d'editer le Cron.
-change script to */1 * * * * sleep 30s && script path : permet de lancer le script toutes les 30 secondes (supprimer la ligne de commande pour arreter le processus).
-su - : permet de se connecter en tant qu'administrateur (root).
-sudo ufw status : permet de verifier le statut du parefeu UFW.
-sudo systemctl status ssh : permet de controler le statut du systeme SSH.
-sha1sum laroges42.vdi : permet d'extraire la signature de la VM.
-ssh laroges@localhost -p 4243 : permet d'ouvrir la VM via ssh.
-uptime -s : permet de consulter les date et heure de connexion du user.
-sudo crontab -l : script
-aa-status : permet de verifier le statut de la securite MAC.
+> lsblk : permet de consulter le "partitionnement".
+> dpkg --list : permet de consulter la liste des packages installes.
+> apt-cache policy <paquet> : permet de voir si un paquet est a jour.
+> cd /usr/local/bin/ && nano monitoring.sh : permet de consulter le fichier de monitoring.
+> sudo crontab -u root -e : permet d'editer le Cron.
+> change script to */1 * * * * sleep 30s && script path : permet de lancer le script toutes les 30 secondes (supprimer la ligne de commande pour arreter le processus).
+> su - : permet de se connecter en tant qu'administrateur (root).
+> sudo ufw status : permet de verifier le statut du parefeu UFW.
+> sudo systemctl status ssh : permet de controler le statut du systeme SSH.
+> sha1sum laroges42.vdi : permet d'extraire la signature de la VM.
+> ssh laroges@localhost -p 4243 : permet d'ouvrir la VM via ssh.
+> uptime -s : permet de consulter les date et heure de connexion du user.
+> sudo crontab -l : script
+> aa-status : permet de verifier le statut de la securite MAC.
 
 
 Dossiers et fichiers utiles de la VM :
-login.defs : permet de configurer les regles de securite des mots de passe (par exemple la duree de validite avant que le systeme impose au user la creation d'un nouveau).
+> login.defs : permet de configurer les regles de securite des mots de passe (par exemple la duree de validite avant que le systeme impose au user la creation d'un nouveau).
+> /var/log/sudo/sudo.log : chemin du fichier qui contient les informations de log sudo.
 
 Autres :
 - Le GUI (Graphical User Interface) est l'interface utilisateur de la VM.
