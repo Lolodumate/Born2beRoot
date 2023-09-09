@@ -26,6 +26,7 @@ Sujet obligatoire :
 
 Attention au consignes de rendu du projet ! Voir consignes page 12 (encadre en bas de page).
 
+
 Notes pour la soutenance :
 
 - Questions generales sur le systeme d'exploitation.
@@ -34,8 +35,22 @@ Notes pour la soutenance :
 		
 		>> Parce que plus simple a installer et a configurer.
 
-	> Quelles sont les differences entre Debian et Rocky ?
 
+	> Quelles sont les differences entre Debian, Rocky et CentOS ?
+
+	Ressources :
+	https://fr.wikipedia.org/wiki/CentOS
+	https://waytolearnx.com/2019/04/difference-entre-centos-et-debian.html
+
+		>> Debian vs CentOS :
+			* Le noyau (Kernel) de Debian a peut fonctionner avec seulement 64 Mo (256 Mo recommandes).
+			* Debian est un OS adapte aux serveurs car il est repute stable et safe.
+			* CentOS est complementaire a Red Hat Enterprise Linux (RHL).
+			* Debian a plus de packages que CentOS (commande dpkg --list pour consulter la liste des packages installes).
+			* Les versions de CentOS sont maintenues pendant 10 ans, tandis que Debian necessite un minimun de connaissances sur Linux.
+			* Mises a jour de l'OS tres compliquee pour CentOS et facile pour Debian.
+			* GUI : compliquee pour CentOS et user friendly pour Debian.
+			
 
 	> Qu'est-ce qu'une VM ?
 
@@ -64,6 +79,7 @@ Notes pour la soutenance :
 
 	> Description de la partition chiffree avec LVM (commande lsblk pour acceder aux partitions).
 
+
 - Differences entre Aptitude et apt-get.
 
 	Ressource : https://fr.linux-console.net/?p=1157#gsc.tab=0
@@ -87,19 +103,22 @@ Notes pour la soutenance :
 			* D'une part il a plus de fonctionnalites.
 			* D'autre part il va prendre des initiatives (suppression automatique de packages non utilises par exemple) et etre force de proposition en cas de conflits ou problemes. Avec apt-get le user doit utiliser des options ou variantes supplementaires en ligne de commande.
 
+
 - Qu'est-ce que SELinux ?
 	
 
 - Qu'est-ce que AppArmor ?
 	
 	> Le systeme de securite Linux fournit la securite MAC (Mandatory Access Control). Ce systeme d'administration permet de restreindre les actions que les processus peuvent realiser. Ce systeme est inclus par defaut avec Debian.
-	> La commande aa-status permet de verifier s'ilest actif.
+	> La commande aa-status permet de verifier s'il est actif.
+
 
 - Qu'est-ce que SSH ?
 
 	> SSH (Secure SHell) est un mecanisme d'authentification entre un client et un environnement hote. 
 	> SSH encrypte les communications.
 	> Il est possible de se connecter a SSH sur un terminal Mac ou Linux.
+
 
 - Test du service SSH : mise en place d'un nouveau compte.
 
@@ -113,23 +132,84 @@ Notes pour la soutenance :
 	> hostnamectl
 	> hostnamectl set-hostname new_hostname
 
+
 - Question sur le fonctionnement du service SSH.
+
+
+
 - Le pare-feu UFW devra etre actif au lancement de la VM.
 	
 	> sudo ufw status
 
-- Qu'est-ce que Cron ?
 
+- Qu'est-ce que Cron (ou Crontab) ?
+
+	> Il s'agit d'un planificateur de taches qui permet de lancer des applications de facon reguliere.
+	> Dans le cadre du projet Born2beRoot, nous nous en servons pour afficher les informations du statut systeme toutes les 10 minutes dans le terminal de commandes de la VM.
+	> crontab -l : permet a l'administrateur root d'afficher le contenu du fichier crontab.
+	> mm hh jj MMM JJJ [user] tache > log : Exemple de masque de la ligne de commande qui permet de determiner la frequence d'execution du script Crontab.
+	> m h dom mon dow * : Masque de la ligne de commande qui permet de determiner la frequence d'execution du script Crontab.
+		>> m : minute.
+		>> h : heure.
+		>> dom : jour du mois.
+		>> mon : mois.
+		>> dow : jour de la semaine.
+		>> * : joker pour n'importe laquelle des donnees precedentes.
+	> */10 * * * * /usr/local/bin/monitoring.sh
+		>> La syntaxe '*/10' permet d'executer le script monitoring.sh toutes les 10 minutes.
+		>> Si a la place de '*/10', nous avions renseigne '10', alors le script s'executerait toutes les heures a Xh10m precises.
 
 - Modification du hostname durant la soutenance.
 
 	> hostnamectl : permet de monitorer le nom du hostname.
 	> hostnamectl set-hostname new_hostname : permet de modifier le nom du hostname.
 
+
+- Configuration de la politique de securite des mots de passe.
+
+	Ressources: 
+	https://debian-facile.org/doc:securite:passwd:libpam-pwquality
+	https://kifarunix.com/enforce-password-complexity-policy-on-ubuntu-18-04/
+	https://manpages.ubuntu.com/manpages/impish/fr/man5/login.defs.5.html
+
+	> sudo apt-get install libpam-pwquality : permet d'installer la bibliotheque de verification de la qualite des mots de passe.
+	> sudo vim /etc/pam.d/common-password : ouverture du fichier de configuration des mots de passe.
+	> Detail des options de configuration dans la ligne de commande (ligne 25 dans le fichier common-password) :
+		>> retry=3 : Le user a trois essais pour saisir un mot de passe. Apres lesquels, abandon de la procedure.
+		>> minlen=10: Le nombre de caracteres contenus dans le mot de passe doit etre de 10 au minimum. 
+		>> ucredit=-1 : Le nombre de majuscules dans le mot de passe doit etre de 1 au minimum.
+		>> dcredit=-1 : Le nombre de chiffres dans le mot de passe doit etre de 1 au minimum.
+		>> maxrepeat=3 : Un meme caractere pourra etre present au maximum 3 fois dans le mot de passe.
+		>> reject_username : Rejete le mot de passe s'il contient le nom du user, y compris s'il est saisi a l'envers.
+		>> difok=7 : Le nouveau mot de passe doit comporter au moins 7 caracteres qui n'etaient pas presents dans le precedent.
+		>> enforce_for_root : Renvoi un message d'erreur de la verification, y compris pour le root. Option absente par defaut : la bonne pratique est de l'ajouter systematiquement.
+
+	> sudo vim /etc/login.defs : ouverture du fichier de configuration de la duree de validite :
+		>> PASS_MAX_DAYS 30 : La modification du mot de passe est rendue obligatoire au bout de 30 jours. Possibilite d'entrer la valeur -1 pour desactiver cette option.
+		>> PASS_MIN_DAYS 2 : La modification d'un mot de passe qui vient d'etre cree ne pourra pas etre faite avant 2 jours. Possibilite d'entrer la valeur -1 pour desactiver cette option.
+		>> PASS_WARN_AGE 7 : Le user recevra un message d'avertissement 7 jours avant l'expiration de son mot de passe. Possibilite de desactiver cette option en entrant un nombre negatif ou en la laissant non renseignee.
+
+
+- Modification des mots de passe.
+
+	> En mode user (laroges) :
+		>> passwd ou sudo passwd.
+		>> Entrer le mot de passe actuel.
+		>> Entrer le nouveau mot de passe (attention aux a la politique de securite en vigueur).
+		>> Confirmer le nouveau mot de passe.
+		>> Si le nouveau de mot de passe est rejete et que le nombre d'essais a ete atteint, la procedure prend fin et le systeme indique explicitement au user que le mot de passe n'a pas ete modifie.
+
+	> En mode administrateur (root) :
+		>> pass ou sudo passwd + nom du user.
+		>> Le systeme ne demande pas le mot de passe courant.
+		>> Entrer et confirmer le nouveau mot de passe selon le meme principe que pour le user dans le point precedent.
+
 - Savoir expliquer l'administration des regles de securite des mots de passe.
 
 Commandes :
 lsblk : permet de consulter le "partitionnement".
+dpkg --list : permet de consulter la liste des packages installes.
+apt-cache policy <paquet> : permet de voir si un paquet est a jour.
 cd /usr/local/bin/ && nano monitoring.sh : permet de consulter le fichier de monitoring.
 sudo crontab -u root -e : permet d'editer le Cron.
 change script to */1 * * * * sleep 30s && script path : permet de lancer le script toutes les 30 secondes (supprimer la ligne de commande pour arreter le processus).
