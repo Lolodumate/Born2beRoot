@@ -82,7 +82,9 @@ Notes pour la soutenance :
 ********************************************************************************************************************************************
 - Differences entre Aptitude et apt-get.
 ========================================
-	Ressource : https://fr.linux-console.net/?p=1157#gsc.tab=0
+	Ressources : 
+	https://fr.linux-console.net/?p=1157#gsc.tab=0
+	https://baigal.medium.com/born2beroot-e6e26dfb50ac
 
 	> Il s'agit de deux outils de gestion de package : activites, installations, suppressions, recherches, etc...
 	> Ces deux outils sont initialement concus pour Debian, mais ont ete rendus compatibles avec RPN Package Manager.
@@ -109,7 +111,7 @@ Notes pour la soutenance :
 	> SELinux (Security-Enhanced Linux) est une architecture de securite pour systemes Linux qui permet aux administrateurs de mieux controler les acces au systeme.	
 
 - Qu'est-ce que AppArmor ?
-	
+==========================	
 	> Le systeme de securite Linux fournit la securite MAC (Mandatory Access Control). Ce systeme d'administration permet de restreindre les actions que les processus peuvent realiser. Ce systeme est inclus par defaut avec Debian.
 	> La commande aa-status permet de verifier s'il est actif.
 
@@ -163,6 +165,8 @@ Notes pour la soutenance :
 ===========================
 	> hostnamectl : permet de monitorer le nom du hostname.
 	> hostnamectl set-hostname new_hostname : permet de modifier le nom du hostname.
+	> sudo reboot : redemarrer la VM.
+	> sudo nano /etc/hosts : modifier le nom actuel de l'hote avec le nouveau nom.
 
 ********************************************************************************************************************************************
 - Configuration de la politique de securite des mots de passe.
@@ -182,7 +186,7 @@ Notes pour la soutenance :
 		>> maxrepeat=3 : Un meme caractere pourra etre present au maximum 3 fois dans le mot de passe.
 		>> reject_username : Rejete le mot de passe s'il contient le nom du user, y compris s'il est saisi a l'envers.
 		>> difok=7 : Le nouveau mot de passe doit comporter au moins 7 caracteres qui n'etaient pas presents dans le precedent.
-		>> enforce_for_root : Renvoi un message d'erreur de la verification, y compris pour le root. Option absente par defaut : la bonne pratique est de l'ajouter systematiquement.
+		>> enforce_for_root : Renvoie un message d'erreur de la verification, y compris pour le root. Option absente par defaut : la bonne pratique est de l'ajouter systematiquement.
 
 	> sudo vim /etc/login.defs : ouverture du fichier de configuration de la duree de validite :
 		>> PASS_MAX_DAYS 30 : La modification du mot de passe est rendue obligatoire au bout de 30 jours. Possibilite d'entrer la valeur -1 pour desactiver cette option.
@@ -219,7 +223,7 @@ Commandes :
 > ssh laroges@localhost -p 4243 : permet d'ouvrir la VM via ssh.
 > uptime -s : permet de consulter les date et heure de connexion du user.
 > sudo crontab -l : script
-> aa-status : permet de verifier le statut de la securite MAC.
+> aa-status : permet de verifier le statut de la securite MAC AppArmor.
 
 
 Dossiers et fichiers utiles de la VM :
