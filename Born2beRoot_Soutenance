@@ -1,0 +1,257 @@
+Reorganisation des notes pour preparation de la soutenance.
+
+Pourquoi avoir choisi Debian ?
+==============================
+	Plus simple a installer et a configurer.
+
+
+Quelles sont les differences entre Debian et CentOS ?
+=====================================================
+	Debian vs CentOS :
+	> Le noyau (Kernel) de Debian peut fonctionner avec seulement 64 Mo. Cependant 256 Mo sont recommandes contre 512 Mo pour CentOS.
+	> Debian est un OS adapte aux serveurs car il est repute stable et sur.
+	> CentOS est complementaire a Red Hat Enterprise Linux (RHL).
+	> Debian a plus de packages que CentOS (commande dpkg --list pour consulter la liste des packages installes).
+	> Les versions de CentOS sont maintenues pendant 10 ans, tandis aue Debian necessite une minimum de connaissances sur Linux.
+	> Mises a jour de l'OS tres compliquee pour CentOS et plus facile pour Debian.
+	> GUI : compliquee pour CentOS et user friendly pour Debian.
+
+
+Qu'est-ce qu'une machine virtuelle ?
+====================================
+	> C'est une ressource qui utilise un logiciel (au lieu d'un hardware pour les IS classiques) pour installer et lancer des programmes.
+	> Chaque VM a son propre OS qui est bien separe de l'OS du hardware. Il est donc possible d'avoir plusieur VM sur une seule et meme machine physique.
+	> Une VM permet de tester un logiciel, un programme ou une application dans un environnement isole et securise.
+	> Une VM fonctionne en simulant une machine physique.
+
+
+Quelles sont les differences entre Aptitude et Apt (Advanced Packaging Tool) ?
+==============================================================================
+	 Il s'agit de deux outils de gestion de packages : activites, installations, suppressionsm recherches, etc...
+	 Ces deux outils ont ete initialement concus pour Debian, mais ont ete rendus compatibles avec RPM Package Manager.
+
+	> Apt (Advanced Packaging Tool) :
+		>> Logiciel gratuit open source.
+		>> Pas d'interface graphique. Ne fonctionne qu'en lignes de commandes.
+
+	> Aptitude :
+		>> Gestionnaire de package avance avec une interface utilisateur basee sur la bibliotheque ncurse.
+		>> Aptitude peut egalement emuler la plupart des commandes apt-get.
+	
+	> Differences :
+		>> Aptitude est un gestionnaire de paquets de haut niveau (interface utilisateur) tandis que Apt est un gestionnaire de paquets de plus bas niveau (lignes de commandes) qui peut etre utilise par d'autres gestionnaires de paquets.
+		>> Aptitude a plus de fonctionnalites que apt-get. Aptitude permet notamment de realiser des recherches de packagem marquer un package a installer, le conserver pour mise a niveau, etc...
+		>> Aptitude integre des fonctionnalites de apt-get comme apt-mark ou apt-cache par exemple.
+		>> Aptitude a une meilleure gestion des paquets. Par exemple :
+			- Lors de la suppression d'un paquet, Aptitude supprime autonatiquement les paquets inutilises. Apt-get quant a lui necessite que l'utilisateur demande explicitement leur suppression via la ligne de commande (-auto-remove ou apt-get autoremove).
+			- Aptitude propose des commandes (why ou why-not : commandes non disponibles dans apt-get) qui permettent d'obtenir des informations sur certaines actions (interet, raisons de blocage, etc...).
+			- Aptitude est capable de faire des suggestions a l'utilisateur en cas de probleme avec l'installation ou la suppression d'un paquet.
+
+	D'une maniere generale Aptitude est plus complet et plus "intelligent" que apt-get dans la mesure ou :
+	> Il a plus de fonctionnalites.
+	> Mais il est surtout proactif et va prendre des initiatives (suppression automatique de paquets non utilises par exemple) et etre force de proposition en cas de conflits ou problemes. Avec apt-getl'utilisateur doit utiliser des options ou variantes supplementaires en les saisissant en ligne de commande.
+
+
+Qu'est-ce que AppArmor ?
+========================
+	> Le systeme de securite Linux fournit la securite MAC (Mandatory Access Control). Ce systeme d'administration permet de restreindre les actions que les processus peuvent realiser. Ce systeme est inclus par defaut avec Debian.
+	> La commande sudo aa-status permet de verifier si AppArmor est actif.
+
+
+Politique de securite des mots de passe.
+========================================
+	> La bibliotheque de verification de la qualite des mots de passe a ete installee a l'aide de la commande sudo apt-get install libpam-pwquality.
+	> sudo vim /etc/pam.d/common-password : permet de consulter le fichier de configuration des mots de passe.
+	> Detail des options de configuration dans la ligne de commande (ligne 25 dans le fichier common-password) :
+		>> retry=3 : L'utilisateur a droit a trois essais maximum pour saisir son mot de passe. Apres quoi, la procedure est abandonnee.
+		>> minlen=10 : Le nombre de caracteres contenus dans le mot de passe doit etre de 10 au minimum.
+		>> ucredit=-1 : Le nombre de majuscules dans le mot de passe doit etre de 1 au minimum.
+		>> dcredit=-1 : Le nombre de chiffres dans le mot de passe doit etre de 1 au minimum.
+		>> maxrepeat=3 : Un meme caractere pourra etre present 3 fois au maximum dans le mot de passe.
+		>> reject_username : Rejete le mot de passe s'il contient le nom de l'utilisateur, y compris s'il est saisi a l'envers.
+		>> difok=7 : Le nouveau mot de passe doit comporter au moins 7 caracteres qui n'etaient pas present dans le precedent.
+		>> enforce_for_root : Renvoie un message d'erreur de la verification, y compris pour le root. Option absente par defaut : la bonne pratique est de l'ajouter systematiquement.
+
+	> Fichier de configuration des durees de validites (sudo vim /etc/login.defs) :
+		>> PASS_MAX_DAYS 30 : La modification du mot de passe est rendue obligatoire au bout de 30 jours. Possibilite d'entrer la valeur -1 pour desactiver cette option.
+		>> PASS_MIN_DAYS 2 : La modification d'un mot de passe qui vient d'etre cree ne pourra pas etre faite avant 2 jours. Possibilite d'entrer la valeur -1 pour desactiver cette option.
+		>> PASS_WARN_AGE 7 : L'utilisateur recevra un message d'avertissement 7 jours avant l'expiration de son mot de passe. Possibilite de desactiver cette option en entrant un nombre ou en la laissant non renseignee.
+
+Qu'est-ce que LVM ?
+===================
+	LVM (Logical Volume Manager) permet la gestion de volumes logiques sous Linux similaires a un partitionnement de disque (consultation via la commande lsblk).
+	
+Avantages :
+	> Gestion plus souple et plus simple de tailles des systemes de fichiers, et sans risque.
+	> Permet de redimensionner les partitions sans formatage.
+	> Permet de rajouter des disques a la volee.
+	> Pas necessaire de connaitre l'emplacement exact des donnees sur le disque.
+	> Permet d'ajouter de l'expace memoire a tout moment.
+	> Possibilite de creer des snapshots (sauvegarde d'etat) de volume sans perturber le fonctionnement de la machine.
+
+Inconvenients :
+	> Risque de perte de donnees en cas de defaillance du disque physique.
+	> Solution preventive possible avec l'utilisation d'un disque RAID.
+
+
+Qu'est-ce que UFW ?
+===================
+	UFW (Uncomplicate Firewall) est une interface qui permet de modifer le parefeu sans compromettre la securite.
+	Il permet de configurer les autorisations de connexion de chacun des ports. Utilise conjointement avec SSH, il peut configurer un port specifique avec lequel il va travailler.
+	sudo ufw : permet de verifier le statut du parefeu.
+		
+
+Qu'est-ce que SSH ?
+===================
+	SSH (Secure SHell) est un mecanisme d'authentification entre un client et un environnement hote.
+
+	> SSH encrypte les communications.
+	> Il est possible de se connecter a SSH sur un terminal Mac ou Linux (commande ssh laroges@localhost -p 4243).
+	> Test du service SSH :
+		>> sudo systemctl status ssh
+		>> getent group sudo
+		>> getent group user42
+		>> sudo adduser ne username
+		>> sudo groupadd groupname
+		>> sudo usermod -aG groupname username
+		>> sudo chage -l username
+		>> hostnamectl
+		>> hostnamectl set-hostname new_hostname
+
+
+Qu'est-ce que Cron ?
+====================
+	Il s'agit d'un planificateur de taches qui permet de lancer des applications de facon reguliere. Dans le cadre du projet Born2beRoot, nous nous en servons pour afficher les informations du statut systeme toutes les 10 minutes dans le terminal de commandes de la VM.
+	
+	> crontab -l : permet a l'administrateur root d'afficher le contenu du fichier crontab.
+	> m h dom mon dow * : Masque de la ligne de commande qui permet de determiner la frequence d'execution du script Crontab :
+		>> m : minute.
+		>> h : heure.
+		>> dom : jour du mois.
+		>> mon : mois.
+		>> dow : jour de la semaine.
+		>> * : jour de la semaine.
+	> */10 * * * * /usr/local/bin/monitoring.sh
+		>> La syntaxe '*/10' permet d'executer le script monitoring.sh toutes les 10 minutes.
+		>> Si a la place de '*/10' nous avions renseigne '10' alors le script s'executerait toutes les heures a Xh10m precises.
+
+Construction du script monitoring.sh
+==============================
+	Repertoire du fichier : /usr/local/bin
+
+	> Architecture du systme et version de Kernel :
+		uname -a
+
+	> Nombre de processeurs physiques :
+		grep "physicalid" /proc/cpuinfo | sort | uniq | wc -l
+
+	> Nombre de processeurs virtuels :
+		grep "processor" /proc/cpuinfo | wc -l
+
+	> RAM disponible actuelle sur le serveur et taux d'utilisation en pourcentage :
+		free -m | awk '$1 == "Mem:" {print $2}'
+		free -m | awk '$1 == "Mem:" {print $3}'
+		free | swk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}'
+	> ROM disponible actuelle sur le serveur et taux d'utilisation en pourcentage :
+		df -BG | grep '^/dev/' | grep -v '/boot$' | awk '{ft += $2} END {print ft}'
+		df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{ut += $3} END {print ut}'
+
+	> Taux d'utilisation actuelle des processeurs en pourcentage :
+		ft -BM | grep '^/dev/' | grep -v '/boot$/ | awk '{ut += $3} {ft += $2} END {printf("%d"), ut/ft*10}'
+
+	> Date et heure du dernier redemarrage :
+		who -b | awk '$1 == "system" {print $3 "  " $4}'
+
+	> Statut du LVM (actif ou non) :
+		if [ $(lsblk | grep "lvm" | wc -l) -eq 0 ]; then echo no; else echo yes; fi
+
+	> Nombre de users utilisant le serveur :
+		users | wc -w
+
+	> Adresse IPv4 du serveur et adresse MAC :
+		hostname -I
+		ip link shoz | grep "ether" | awk '{print $2}'
+
+	> Nombre de commandes executees avec le programme sudo :
+		journalctl _COMM=sudo | grep COMMAND | wc -l
+
+	P.S. : Toutes ces commandes ont fait l'objet de creations d'alias pour rendre la commande wall plus lisible.
+	
+Ajout du script sleep.sh dans /usr/local/bin/:
+#!bin/bash
+
+# Get boot time minutes and seconds
+BOOT_MIN=$(uptime -s | cut -d ":" -f 2)
+BOOT_SEC=$(uptime -s | cut -d ":" -f 3)
+
+# Calculate number of seconds between the nearest 10th minute of the hour and boot time:
+# Ex: if boot time was 11:43:36
+# 43 % 10 = 3 minutes since 40th minute of the hour
+# 3 * 60 = 180 seconds since 40th minute of the hour
+# 180 + 36 = 216 seconds between nearest 10th minute of the hour and boot
+DELAY=$(bc <<< $BOOT_MIN%10*60+$BOOT_SEC)
+
+# Wait that number of seconds
+sleep $DELAY
+
+
+Modifier le hostname :
+	hostnamectl : consulter.
+	hostnamectl set-hostname new_hostname : modifier le hostname.
+	sudo reboot : redemarrer.
+	sudo nano /etc/hosts : modifier le hostname
+
+Commandes Bash :
+================
+Consulter le statut du parefeu UFW :
+	sudo ufw status
+
+Consulter le statut du service SSH :
+	sudo systemctl status ssh
+
+Consulter le groupe d'utilisateurs sudo :
+	getent group sudo
+
+Consulter le groupe d'utilisateurs user42 :
+	getent group user42
+
+Creer un nouvel utilisateur :
+	sudo adduser new username
+
+Ajouter un nouvel utilisateur a un groupe d'utilisateurs :
+	sudo username -aG groupname username
+
+Verifier les regles d'expiration du mot de passe d'un utilisateur :
+	sudo usermod -aG groupname username
+
+Consulter le nom de l'hote :
+	hostnamectl
+
+Modifier le nom de l'hote :
+	hostnamectl set-hostname new_hostname
+
+Redemarrer la machine virtuelle :
+	sudo reboot
+
+Modifier le nom actuel de l'hote avec le nouveau nom :
+	sudo nano /etc/hosts
+
+Consulter le partitionnement de la machine virtuelle :
+	lsblk
+
+Verifier que sudo est bien installe :
+	dpkg -l | grep sudo -
+
+Verifier le status du parefeu UFW avec les numeros de regles :
+	sudo ufw status numbered
+
+Autoriser (?) un port sur le parefeu UFW :
+	sudo ufw allow port-id
+
+Supprimer une regle de parefeu :
+	sudo ufw delete rule number
+
+Connexion au service SSH dans un terminal :
+	ssh laroges@localhost -p 4243
+
+
