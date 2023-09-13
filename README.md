@@ -108,7 +108,11 @@ Notes pour la soutenance :
 ********************************************************************************************************************************************
 - Qu'est-ce que SELinux ?
 =========================
-	> SELinux (Security-Enhanced Linux) est une architecture de securite pour systemes Linux qui permet aux administrateurs de mieux controler les acces au systeme.	
+	Ressource : https://www.redhat.com/fr/topics/linux/what-is-selinux#:~:text=Pour%20consulter%20la%20liste%20des,)%20ou%20Disabled%20(d%C3%A9sactiv%C3%A9).
+
+	> SELinux (Security-Enhanced Linux) est une architecture de securite pour systemes Linux qui permet aux administrateurs de mieux controler les acces au systeme.
+	> SELinux definit les controles d'acces pour les applications, processus et fichiers d'un systeme. Il utilise des politiques de securite, c'est-a-dire des ensembles de regles qui lui indiquent ce a quoi un utilisateur peut acceder ou nonm pour mettre en application les autorisations d'acces definies par une politique.
+	> Le systeme de securite AppArmor etant deja installe dans la VM, il n'est pas necessaire d'installer SELinux. Cela ferait double emploi et il y aurait des risques de conflits.
 
 - Qu'est-ce que AppArmor ?
 ==========================	
