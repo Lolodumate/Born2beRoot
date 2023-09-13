@@ -56,6 +56,7 @@ Qu'est-ce que AppArmor ?
 ========================
 	> Le systeme de securite Linux fournit la securite MAC (Mandatory Access Control). Ce systeme d'administration permet de restreindre les actions que les processus peuvent realiser. Ce systeme est inclus par defaut avec Debian.
 	> La commande sudo aa-status permet de verifier si AppArmor est actif.
+	> Dans la mesure ou AppArmor est installe et actif, il n'est pas necessaire - ni recommande - d'installer SELinux. Cela ferait double emploi et il y aurait des risques de conflits.
 
 
 Politique de securite des mots de passe.
@@ -124,6 +125,7 @@ Qu'est-ce que Cron ?
 	Il s'agit d'un planificateur de taches qui permet de lancer des applications de facon reguliere. Dans le cadre du projet Born2beRoot, nous nous en servons pour afficher les informations du statut systeme toutes les 10 minutes dans le terminal de commandes de la VM.
 	
 	> crontab -l : permet a l'administrateur root d'afficher le contenu du fichier crontab.
+	> sudo crontab -u root -e : permet d'ouvrir le fichier crontab.
 	> m h dom mon dow * : Masque de la ligne de commande qui permet de determiner la frequence d'execution du script Crontab :
 		>> m : minute.
 		>> h : heure.
@@ -200,6 +202,13 @@ Modifier le hostname :
 	hostnamectl set-hostname new_hostname : modifier le hostname.
 	sudo reboot : redemarrer.
 	sudo nano /etc/hosts : modifier le hostname
+
+Verifications a faire lors de la soutenance (a faire avec profil root) :
+=============================================
+	head -n 2 /etc/os-release : permet de consulter le nom de l'OS installe.
+	/usr/sbin/aa-status : permet de controler que AppArmor est bien installe.
+	ss -tunlp : permet de lister les ports tcp ouverts.
+	/usr/sbin/ufw status : permet de controler le statut du parefeu UFW.
 
 Commandes Bash :
 ================
